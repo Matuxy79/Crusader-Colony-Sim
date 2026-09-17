@@ -187,6 +187,57 @@ LLM dialogue is optional: set `CCS_LLM_URL`, `CCS_LLM_KEY`, `CCS_LLM_MODEL`
 for any OpenAI-compatible endpoint; otherwise a personality-driven offline
 generator (trait templates + Markov chain) is used.
 
+### Composite sprite engine v2
+
+The standalone Pygame demo supports manifest-driven PNG sheets and generated
+placeholders through the same runtime API:
+
+```bash
+python -m pip install -r requirements.txt
+python sprite_engine_v2.py
+```
+
+Use the arrow keys to move, jump, or crouch; `Z`/`X` for archetype-specific
+attacks; `C` for special; `Shift` to guard; and `Tab` to rotate through the
+five-character roster. Press `P` to export transparent animation frames and
+labeled contact sheets to `debug_png/` for quick review. Put PNG sheets and
+matching JSON manifests in `assets/`. Press `G` to generate starter manifests
+for PNG files that do not have one. See `akaza_manifest_example.json` for
+variable frame timing, VFX rows, hitbox overrides, palette metadata, and combo
+routes.
+
+`CompositeSprite.serialize()` produces the fixed 12-byte little-endian packet
+`<BBBbff`: character ID, state, frame index, facing, x, and y.
+
+#### Windows launcher and executable
+
+For source mode, install dependencies once and then double-click
+`Launch Sprite Engine.bat`. The launcher prefers
+`dist/CrusaderSpriteEngine.exe` when a packaged build exists and otherwise
+runs `sprite_engine_v2.py` with Python.
+
+To build the standalone Windows executable:
+
+1. Save the launcher artwork as `assets/sprite_engine_icon.png`.
+2. Double-click `Build Sprite Engine EXE.bat`, or run it from Command Prompt.
+3. Launch `dist/CrusaderSpriteEngine.exe` directly or use the launcher batch
+  file.
+
+The build script installs `requirements-build.txt`, converts the PNG artwork
+to a multi-size Windows icon, and packages a one-file windowed executable.
+Without the PNG it generates a simple fallback icon. External `assets/` and
+generated `debug_png/` folders live beside the EXE. The build copies the current
+assets into `dist/assets/`; they can also be replaced there without rebuilding.
+
+Useful verification and export commands:
+
+```bash
+python sprite_engine_v2.py --smoke-test
+python sprite_engine_v2.py --export-debug
+python -m unittest tests.test_sprite_engine_v2
+dist\CrusaderSpriteEngine.exe --smoke-test
+```
+
 Verified: 1000+ pawns at ~70-85 simulated days/s; succession, partition,
 holy wars, sieges, era progression and save/load round-trip all exercised
 over 20-year headless runs.

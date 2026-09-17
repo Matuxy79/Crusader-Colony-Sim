@@ -1,3 +1,8 @@
 __pycache__/
 *.pyc
 *.pkl
+debug_png/**/*.png
+debug_png/*_review.png
+build/
+dist/
+*.spec
